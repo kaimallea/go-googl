@@ -4,6 +4,7 @@
     8l -o googl googl.8
 
 *If you're on Windows you may want the output to be googl.exe
+
 *If you use the 64-bit compiler, substitute all the above 8s with 6s
 
 ## Usage
