@@ -23,7 +23,7 @@ var (
 func expandUrl(url string) (string, string) {
 	res, _, err := http.Get(expand_endpoint + url)
 	if err != nil {
-		fmt.Printf("%s", err)
+		fmt.Printf("%s\n\r", err)
 		return "", url
 	}
 
@@ -31,7 +31,7 @@ func expandUrl(url string) (string, string) {
 
 	body, _ := ioutil.ReadAll(res.Body)
 	if json.Unmarshal(body, &jsonresult) != nil {
-		fmt.Printf("Error processing %s", url)
+		fmt.Printf("Error processing %s\n\r", url)
 		return "", url
 	}
 
@@ -50,7 +50,7 @@ func shortenUrl(url string) (string, string) {
 
 	res, err := http.Post(shorten_endpoint, "application/json", payload)
 	if err != nil {
-		fmt.Printf("%s", err)
+		fmt.Printf("%s\n\r", err)
 		return "", url
 	}
 
@@ -58,7 +58,7 @@ func shortenUrl(url string) (string, string) {
 
 	body, _ := ioutil.ReadAll(res.Body)
 	if json.Unmarshal(body, &jsonresult) != nil {
-		fmt.Printf("Error processing %s", url)
+		fmt.Printf("Error processing %s\n\r", url)
 		return "", url
 	}
 
