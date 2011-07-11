@@ -20,11 +20,11 @@ var (
  * Expand a shortened url
  *
  */
-func expandUrl(url string) string {
+func expandUrl(url string) (string, string) {
 	res, _, err := http.Get(expand_endpoint + url)
 	if err != nil {
 		fmt.Printf("%s", err)
-		return ""
+		return "", url
 	}
 
 	var jsonresult map[string]string
@@ -32,12 +32,12 @@ func expandUrl(url string) string {
 	body, _ := ioutil.ReadAll(res.Body)
 	if json.Unmarshal(body, &jsonresult) != nil {
 		fmt.Printf("Error processing %s", url)
-		return ""
+		return "", url
 	}
 
 	res.Body.Close()
 
-	return jsonresult["longUrl"]
+	return jsonresult["longUrl"], url
 }
 
 
@@ -45,13 +45,13 @@ func expandUrl(url string) string {
  * Shorten a long url
  *
  */
-func shortenUrl(url string) string {
+func shortenUrl(url string) (string, string) {
 	payload := strings.NewReader("{\"longUrl\": \"" + url + "\"}")
 
 	res, err := http.Post(shorten_endpoint, "application/json", payload)
 	if err != nil {
 		fmt.Printf("%s", err)
-		return ""
+		return "", url
 	}
 
 	var jsonresult map[string]string
@@ -59,12 +59,12 @@ func shortenUrl(url string) string {
 	body, _ := ioutil.ReadAll(res.Body)
 	if json.Unmarshal(body, &jsonresult) != nil {
 		fmt.Printf("Error processing %s", url)
-		return ""
+		return "", url
 	}
 
 	res.Body.Close()
 
-	return jsonresult["id"]
+	return jsonresult["id"], url
 }
 
 
@@ -73,7 +73,7 @@ func shortenUrl(url string) string {
  * shortened or expanded
  *
  */
-func processUrl(url string) string {
+func processUrl(url string) (string, string) {
 
 	// Prepend protocol if its missing
 	if !strings.Contains(url, "http://") {
@@ -98,6 +98,7 @@ func main() {
 	}
 
 	for i := 1; i < nArgs; i++ {
-		fmt.Println(processUrl(os.Args[i]))
+		r, u := processUrl(os.Args[i])
+		fmt.Println(u, " -> ", r)
 	}
 }
