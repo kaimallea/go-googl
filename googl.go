@@ -21,7 +21,7 @@ var (
  *
  */
 func expandUrl(url string) (string, string) {
-	res, _, err := http.Get(expand_endpoint + url)
+	res, err := http.Get(expand_endpoint + url)
 	if err != nil {
 		fmt.Printf("%s\n\r", err)
 		return "", url
